@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -10,7 +12,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.io.StringReader;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -91,7 +98,7 @@ public class Tests {
         ProiectPOO.main(getInputArgs(inputFolder, commandFolder));
         String output = outPrintStream.toString();
 
-        assertJsonLineAreEqual(output, commandFolder);
+        assertJsonLineAreEqual(output, commandFolder, false, true);
 
         System.setOut(System.out);
     }
@@ -136,7 +143,7 @@ public class Tests {
         ProiectPOO.main(getInputArgs(inputFolder, commandFolder));
         String output = outPrintStream.toString();
 
-        assertJsonLineAreEqual(output, commandFolder);
+        assertJsonLineAreEqual(output, commandFolder, false, true);
 
         System.setOut(System.out);
     }
@@ -151,7 +158,7 @@ public class Tests {
         ProiectPOO.main(getInputArgs(inputFolder, commandFolder));
         String output = outPrintStream.toString();
 
-        assertJsonLineAreEqual(output, commandFolder);
+        assertJsonLineAreEqual(output, commandFolder, false, true);
 
         System.setOut(System.out);
     }
@@ -166,7 +173,7 @@ public class Tests {
         ProiectPOO.main(getInputArgs(inputFolder, commandFolder));
         String output = outPrintStream.toString();
 
-        assertJsonLineAreEqual(output, commandFolder);
+        assertJsonLineAreEqual(output, commandFolder, false, true);
 
         System.setOut(System.out);
     }
@@ -263,29 +270,36 @@ public class Tests {
 
     private String[] getInputArgs(String inputFolder, String testFolder) {
         return new String[]{inputFolder + STREAMERS_FILE,
-                            inputFolder + STREAMS_FILE,
-                            inputFolder + USERS_FILE,
-                            testFolder + COMMANDS_FILE};
+                inputFolder + STREAMS_FILE,
+                inputFolder + USERS_FILE,
+                testFolder + COMMANDS_FILE};
     }
 
     private void assertJsonLineAreEqual(String actualOutput, String inputFolder)
             throws IOException {
-        assertJsonLineAreEqual(actualOutput, inputFolder, false);
+        assertJsonLineAreEqual(actualOutput, inputFolder, false, false);
     }
+
     private void assertJsonLineAreEqual(String actualOutput, String inputFolder, boolean ignoreDate)
+            throws IOException {
+        assertJsonLineAreEqual(actualOutput, inputFolder, ignoreDate, false);
+    }
+
+    private void assertJsonLineAreEqual(String actualOutput, String inputFolder, boolean ignoreDate,
+                                        boolean ignoreOrder)
             throws IOException {
 
         BufferedReader
                 expectedOutput =
                 new BufferedReader(new FileReader(
                         System.getProperty("user.dir") + "/src/test/resources/" + inputFolder
-                        + REFERENCE_FILE));
+                                + REFERENCE_FILE));
         BufferedReader actualOutputFile = new BufferedReader(new StringReader(actualOutput));
         String expectedJsonLine;
         String actualJsonLine;
         while ((expectedJsonLine = expectedOutput.readLine()) != null) {
             actualJsonLine = actualOutputFile.readLine();
-            if(actualJsonLine == null) {
+            if (actualJsonLine == null) {
                 Assertions.fail();
             }
 
@@ -296,7 +310,133 @@ public class Tests {
                 jsonNodeActual = ((ArrayNode) jsonNodeActual).remove(6);
                 jsonNodeExpected = ((ArrayNode) jsonNodeExpected).remove(6);
             }
-            assertEquals(jsonNodeExpected, jsonNodeActual);
+
+            if (ignoreOrder) {
+                List<StreamOutput>
+                        actualStreams =
+                        objectMapper.readValue(actualJsonLine,
+                                new TypeReference<LinkedList<StreamOutput>>() {
+                                });
+                List<StreamOutput>
+                        expectedStreams =
+                        objectMapper.readValue(actualJsonLine,
+                                new TypeReference<LinkedList<StreamOutput>>() {
+                                });
+                Collections.sort(actualStreams);
+                Collections.sort(expectedStreams);
+                assertEquals(actualStreams, expectedStreams);
+            } else {
+                assertEquals(jsonNodeExpected, jsonNodeActual);
+            }
+        }
+    }
+
+
+    public static class StreamOutput implements Comparable<StreamOutput>, Serializable {
+        @JsonProperty
+        private String id;
+        @JsonProperty
+        private String name;
+        @JsonProperty
+        private String streamerName;
+        @JsonProperty
+        private String noOfListenings;
+        @JsonProperty
+        private String length;
+        @JsonProperty
+        private String dateAdded;
+
+        public String getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getStreamerName() {
+            return streamerName;
+        }
+
+        public String getNoOfListenings() {
+            return noOfListenings;
+        }
+
+        public String getLength() {
+            return length;
+        }
+
+        public String getDateAdded() {
+            return dateAdded;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public void setStreamerName(String streamerName) {
+            this.streamerName = streamerName;
+        }
+
+        public void setNoOfListenings(String noOfListenings) {
+            this.noOfListenings = noOfListenings;
+        }
+
+        public void setLength(String length) {
+            this.length = length;
+        }
+
+        public void setDateAdded(String dateAdded) {
+            this.dateAdded = dateAdded;
+        }
+
+        @Override
+        public int compareTo(StreamOutput o) {
+            return this.id.compareTo(o.getId());
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof StreamOutput)) {
+                return false;
+            }
+
+            StreamOutput that = (StreamOutput) o;
+
+            if (!Objects.equals(id, that.id)) {
+                return false;
+            }
+            if (!Objects.equals(name, that.name)) {
+                return false;
+            }
+            if (!Objects.equals(streamerName, that.streamerName)) {
+                return false;
+            }
+            if (!Objects.equals(noOfListenings, that.noOfListenings)) {
+                return false;
+            }
+            if (!Objects.equals(length, that.length)) {
+                return false;
+            }
+            return Objects.equals(dateAdded, that.dateAdded);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = id != null ? id.hashCode() : 0;
+            result = 31 * result + (name != null ? name.hashCode() : 0);
+            result = 31 * result + (streamerName != null ? streamerName.hashCode() : 0);
+            result = 31 * result + (noOfListenings != null ? noOfListenings.hashCode() : 0);
+            result = 31 * result + (length != null ? length.hashCode() : 0);
+            result = 31 * result + (dateAdded != null ? dateAdded.hashCode() : 0);
+            return result;
         }
     }
 }

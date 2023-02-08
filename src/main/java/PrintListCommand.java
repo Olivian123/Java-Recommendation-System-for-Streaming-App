@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /* prints lists the user or streamer strems  */
@@ -29,10 +28,11 @@ public class PrintListCommand implements Command{
         /* getting the accounts streams */
         List<Stream> accountStreams = account.getAccountStreams(streams);
 
+        /* I will let this here as reminder */
         /* (I don't know why , but) if the id is of a streamer, */
         /* the streams need to be listed in reversed order */
-        if(account instanceof Streamer)
-            Collections.reverse(accountStreams);
+        /* if(account instanceof Streamer)
+            Collections.reverse(accountStreams); */
 
         /* actual printing , in json form */
         System.out.print("[");
