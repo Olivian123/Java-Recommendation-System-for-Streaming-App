@@ -68,8 +68,8 @@ public class Stream {
 
     private String getStreamDate() {
 
-        Instant instant = Instant.ofEpochMilli(this.dateAdded * 1000 - 3600);
-        LocalDateTime date = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+        Instant instant = Instant.ofEpochMilli(this.dateAdded * 1000);
+        LocalDateTime date = LocalDateTime.ofInstant(instant, ZoneId.of("Europe/London"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         return formatter.format(date);
