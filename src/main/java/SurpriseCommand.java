@@ -47,7 +47,7 @@ public class SurpriseCommand implements Command{
 
             int ok = 0;
             for(Stream watchedStream : accountStreams)
-                if(watchedStream.streamerId == stream.streamerId) {
+                if(watchedStream.getStreamerId() == stream.getStreamerId()) {
                     ok = 1;
                     break;
                 }
@@ -61,17 +61,17 @@ public class SurpriseCommand implements Command{
         /* truncating the sorted list of unwatched streams */
         streamsOfUnwatchedStreamers.sort((o1, o2) -> {
 
-            long difference = o1.dateAdded - o2.dateAdded;
+            long difference = o1.getDateAdded() - o2.getDateAdded();
             if(difference < 24 * 3600 && difference > - 24 * 3600){
 
-                if(o1.noOfStreams > o2.noOfStreams)
+                if(o1.getNoOfStreams() > o2.getNoOfStreams())
                     return -1;
-                else if(o1.noOfStreams == o2.noOfStreams)
+                else if(o1.getNoOfStreams() == o2.getNoOfStreams())
                     return 0;
                 else
                     return -1;
             }
-            else if(o1.dateAdded > o2.dateAdded)
+            else if(o1.getDateAdded() > o2.getDateAdded())
                 return -1;
             else
                 return 0;

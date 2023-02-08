@@ -45,7 +45,7 @@ public class RecommendationCommand implements Command{
         List<Stream> unwatched = getUnwatchedStreams(accountStreams, userStreamerIds);
 
         /* truncating the sorted list of unwatched streams */
-        unwatched.sort(Comparator.comparingLong(o -> -o.noOfStreams));
+        unwatched.sort(Comparator.comparingLong(o -> -o.getNoOfStreams()));
         if(unwatched.size() > 5)
             unwatched = unwatched.subList(0, 4);
 
@@ -67,7 +67,7 @@ public class RecommendationCommand implements Command{
             int ok1 = 0;
 
             for(int streamerId : userStreamerIds)
-                if (stream.streamerId == streamerId) {
+                if (stream.getStreamerId() == streamerId) {
                     ok1 = 1;
                     break;
                 }
@@ -100,13 +100,13 @@ public class RecommendationCommand implements Command{
                 ok = 1;
 
             for(int streamerId : userStreamerIds)
-                if(stream.streamerId == streamerId) {
+                if(stream.getStreamerId() == streamerId) {
                     ok = 1;
                     break;
                 }
 
             if(ok == 0)
-                userStreamerIds.add(stream.streamerId);
+                userStreamerIds.add(stream.getStreamerId());
         }
         return userStreamerIds;
     }

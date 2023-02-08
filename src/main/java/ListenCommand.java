@@ -32,7 +32,7 @@ public class ListenCommand implements Command{
 
         for(Stream stream : streams) {
             if (stream.getId() == streamId) {
-                stream.noOfStreams++;
+                stream.setNoOfStreams(stream.getNoOfStreams() + 1);
                 break;
             }
         }

@@ -3,9 +3,9 @@ import java.util.List;
 
 public class Streamer extends Account{
 
-    int streamerType;
-    int id;
-    String name;
+    private final int streamerType;
+    private final int id;
+    private final String name;
 
     Streamer(int streamerType, int id, String name) {
         this.streamerType = streamerType;
@@ -22,7 +22,7 @@ public class Streamer extends Account{
         List<Stream> streamerStreams = new ArrayList<>();
 
         for(Stream stream : streams)
-            if(stream.streamerId == id)
+            if(stream.getStreamerId() == id)
                 streamerStreams.add(stream);
 
         return streamerStreams;
@@ -37,4 +37,5 @@ public class Streamer extends Account{
     public String getName() {
         return name;
     }
+
 }

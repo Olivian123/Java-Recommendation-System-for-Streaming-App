@@ -10,11 +10,11 @@ public class Stream {
 
     private final int streamType;
     private final int id;
-    int streamGenre;
-    long noOfStreams;
-    int streamerId;
-    long length;
-    long dateAdded;
+    private final int streamGenre;
+    private long noOfStreams;
+    private final int streamerId;
+    private final long length;
+    private long dateAdded;
     private final String name;
 
     Stream (int streamType, int id, int streamGenre, long noOfStreams,
@@ -34,12 +34,28 @@ public class Stream {
         return id;
     }
 
+    public void setNoOfStreams (long noOfStreams) {
+        this.noOfStreams = noOfStreams;
+    }
+
+    public long getNoOfStreams() {
+        return noOfStreams;
+    }
+
     public String getName() {
         return name;
     }
 
     public int getStreamerId() {
         return streamerId;
+    }
+
+    public long getDateAdded() {
+        return dateAdded;
+    }
+
+    public void setDateAdded(long dateAdded) {
+        this.dateAdded = dateAdded;
     }
 
     public int getStreamType() {
