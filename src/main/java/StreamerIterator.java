@@ -1,6 +1,7 @@
 import java.util.Iterator;
 import java.util.List;
 
+/* used to iterate through a collection of streamers  */
 public class StreamerIterator implements AccountIterator{
 
     private final List<Streamer> streamers;

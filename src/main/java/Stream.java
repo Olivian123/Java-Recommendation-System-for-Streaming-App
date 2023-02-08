@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 public class Stream {
 
@@ -62,16 +61,16 @@ public class Stream {
         return streamType;
     }
 
+    @Override
+    public String toString () {
 
-    public String toString (List<User> users, List<Streamer> streamers) {
         AccountManager accountManager = AccountManager.getInstance();
-        accountManager.updateLists(users, streamers);
+
         /* getting the stream's streamer name, it is obvious that it will be */
         /* of type Streamer */
         Account streamer = accountManager.getAccount(this.getStreamerId());
 
         String duration = getDuration(length);
-
         String streamDate = getStreamDate();
 
         return "{" + '"' + "id" + '"' + ':' + '"' + id + '"' + ',' +
@@ -82,6 +81,7 @@ public class Stream {
                 '"' + "dateAdded" + '"' + ':' + '"' + streamDate + '"' + '}';
     }
 
+    /* sets the date to the desired format */
     private String getStreamDate() {
 
         Instant instant = Instant.ofEpochMilli(this.dateAdded * 1000);
@@ -91,26 +91,31 @@ public class Stream {
         return formatter.format(date);
     }
 
+    /* sets the duration to the desired format */
     private String getDuration (long length) {
 
+        /* getting the hours, minutes and seconds */
         Duration duration = Duration.of(length, ChronoUnit.SECONDS);
         long hours = duration.toHours();
         long minutes = duration.minusHours(hours).toMinutes();
         long seconds = duration.minusHours(hours).minusMinutes(minutes).getSeconds();
 
+        /* adding "0" if the seconds consist of only one digit */
         String sec = Long.toString(seconds);
         if(seconds < 10)
             sec = "0" + sec;
 
+        /* adding "0" if the minutes consist of only one digit */
         String min = Long.toString(minutes);
         if(minutes < 10)
             min = "0" + min;
 
+        /* adding "0" if the hours consist of only one digit */
         String h = Long.toString(hours);
         if(hours < 10)
             h = "0" + h;
 
-
+        /* if the hours are equal to zero, it does not print them */
         if(hours == 0)
             return min + ":" + sec;
 

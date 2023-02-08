@@ -13,10 +13,7 @@ public class User extends Account {
         this.streams = streamIDs;
     }
 
-    public String toString () {
-        return id + " " + name + " " + streams;
-    }
-
+    /* returns the users streams */
     public List<Stream> getAccountStreams(List<Stream> streams) {
 
         List<Stream> userStreams = new ArrayList<>();

@@ -1,11 +1,13 @@
 import java.util.ArrayList;
 
+/* used to read an object of type Streamer */
 public class StreamReader extends DataCSV<Stream> {
 
     public StreamReader (ArrayList<Stream> list) {
         super(list);
     }
 
+    /* it uses "extractFromCSV" method from DataCSV only changing the processing step */
     @Override
     protected void processData(ArrayList<Stream> list, String[] parameters) {
 

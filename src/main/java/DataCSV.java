@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/* extracts the data from CSV files */
 public abstract class DataCSV<T> {
 
     protected ArrayList<T> list;
@@ -35,7 +36,7 @@ public abstract class DataCSV<T> {
             String delimiter =  String.valueOf(new char[]{'"', ',', '"'});
             String[] words = input.next().split(delimiter);
 
-            /* removing '"' from each word from the line */
+            /* removing '"' from each word of the line */
             for(int i = 0; i < words.length; i++)
                 words[i] = words[i].replace('"', ' ').trim();
 

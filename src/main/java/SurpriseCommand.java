@@ -3,15 +3,10 @@ import java.util.List;
 
 public class SurpriseCommand implements Command{
 
-    private final List<User> users;
-    private final List<Streamer> streamers;
     private final List<Stream> streams;
     String line;
 
-    public SurpriseCommand(List<User> users, List<Streamer> streamers, List<Stream> streams, String line){
-
-        this.users = users;
-        this.streamers = streamers;
+    public SurpriseCommand(List<Stream> streams, String line) {
         this.streams = streams;
         this.line = line;
     }
@@ -25,11 +20,11 @@ public class SurpriseCommand implements Command{
         int id = Integer.parseInt(words.get(0));
 
         AccountManager accountManager = AccountManager.getInstance();
-        accountManager.updateLists(users, streamers);
 
         Account account = accountManager.getAccount(id);
         List<Stream> accountStreams = account.getAccountStreams(streams);
 
+        /* setting the type */
         int type;
         if(words.get(1).trim().equals("SONG"))
             type = 1;
@@ -38,14 +33,36 @@ public class SurpriseCommand implements Command{
         else
             type = 3;
 
+        /* getting the list of unwatched streams of the type */
+        List<Stream> strOfUnStreamers = getStrOfUnStreamers(accountStreams, type);
+
+        /* sorting and truncating the list of unwatched streams */
+        strOfUnStreamers = sortStreams(strOfUnStreamers);
+
+        /* printing */
+        System.out.print("[");
+        for(Stream stream : strOfUnStreamers) {
+            System.out.print(stream);
+
+            if(stream !=strOfUnStreamers.get(strOfUnStreamers.size() - 1))
+                System.out.print(",");
+        }
+        System.out.println("]");
+    }
+
+    /* returns a list of unwatched streams of a certain type  */
+    private List<Stream> getStrOfUnStreamers(List<Stream> accountStreams, int type) {
         List<Stream> streamsOfUnwatchedStreamers = new ArrayList<>();
+
         for(Stream stream : streams) {
 
+            /* going over the streams that are not of the required type */
             if(stream.getStreamType() != type) {
                 continue;
             }
 
             int ok = 0;
+            /* checking if the stream belongs to a fallowed streamer */
             for(Stream watchedStream : accountStreams)
                 if(watchedStream.getStreamerId() == stream.getStreamerId()) {
                     ok = 1;
@@ -55,13 +72,20 @@ public class SurpriseCommand implements Command{
             if (ok == 0) {
                 streamsOfUnwatchedStreamers.add(stream);
             }
-
         }
 
-        /* truncating the sorted list of unwatched streams */
-        streamsOfUnwatchedStreamers.sort((o1, o2) -> {
+        return streamsOfUnwatchedStreamers;
+    }
+
+    /* sorts and truncates the list */
+    private List<Stream> sortStreams(List<Stream> strOfUnStreamers) {
+
+        /* using lambda notation to sort first based on date than on number of listens */
+        strOfUnStreamers.sort((o1, o2) -> {
 
             long difference = o1.getDateAdded() - o2.getDateAdded();
+
+            /* checking if the dates are in the same day */
             if(difference < 24 * 3600 && difference > - 24 * 3600){
 
                 if(o1.getNoOfStreams() > o2.getNoOfStreams())
@@ -77,17 +101,11 @@ public class SurpriseCommand implements Command{
                 return 0;
         });
 
-        if(streamsOfUnwatchedStreamers.size() > 3) {
-            streamsOfUnwatchedStreamers = streamsOfUnwatchedStreamers.subList(0, 3);
+        /* truncating to length 3 */
+        if(strOfUnStreamers.size() > 3) {
+            strOfUnStreamers = strOfUnStreamers.subList(0, 3);
         }
 
-        System.out.print("[");
-        for(Stream stream : streamsOfUnwatchedStreamers) {
-            System.out.print(stream.toString(users, streamers));
-
-            if(stream !=streamsOfUnwatchedStreamers.get(streamsOfUnwatchedStreamers.size() - 1))
-                System.out.print(",");
-        }
-        System.out.println("]");
+        return strOfUnStreamers;
     }
 }

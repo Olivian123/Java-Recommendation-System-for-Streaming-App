@@ -2,17 +2,14 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/* runs the algorithm for recommending streams */
 public class RecommendationCommand implements Command{
-    
-    private final List<User> users;
-    private final List<Streamer> streamers;
+
     private final List<Stream> streams;
     String line;
     
-    public RecommendationCommand(List<User> users, List<Streamer> streamers, List<Stream> streams, String line){
+    public RecommendationCommand(List<Stream> streams, String line){
 
-        this.users = users;
-        this.streamers = streamers;
         this.streams = streams;
         this.line = line;
     }
@@ -25,11 +22,11 @@ public class RecommendationCommand implements Command{
         int id = Integer.parseInt(words.get(0));
 
         AccountManager accountManager = AccountManager.getInstance();
-        accountManager.updateLists(users, streamers);
 
         Account account = accountManager.getAccount(id);
         List<Stream> accountStreams = account.getAccountStreams(streams);
 
+        /* setting the type */
         int type;
         if(words.get(1).equals("SONG"))
             type = 1;
@@ -49,9 +46,10 @@ public class RecommendationCommand implements Command{
         if(unwatched.size() > 5)
             unwatched = unwatched.subList(0, 4);
 
+        /* printing */
         System.out.print("[");
         for(Stream stream : unwatched) {
-            System.out.print(stream.toString(users, streamers));
+            System.out.print(stream);
 
             if(stream != unwatched.get(unwatched.size() - 1))
                 System.out.print(",");
@@ -59,13 +57,43 @@ public class RecommendationCommand implements Command{
         System.out.println("]");
     }
 
+
+    /* returns a list of the streamers ids  */
+    private static List<Integer> getUserStreamersIds(List<Stream> accountStreams, int type) {
+        List<Integer> userStreamerIds = new ArrayList<>();
+
+        for(Stream stream : accountStreams) {
+
+            int ok = 0;
+
+            /* checking if the type is right */
+            if(stream.getStreamType() != type)
+                ok = 1;
+
+            /* making sure that the streamer does not repeat */
+            for(int streamerId : userStreamerIds)
+                if(stream.getStreamerId() == streamerId) {
+                    ok = 1;
+                    break;
+                }
+
+            if(ok == 0)
+                userStreamerIds.add(stream.getStreamerId());
+        }
+
+        return userStreamerIds;
+    }
+
+    /* returns a list of unwatched streams */
     private List<Stream> getUnwatchedStreams(List<Stream> accountStreams, List<Integer> userStreamerIds) {
+
         List<Stream> unwatched = new ArrayList<>();
 
+        /* going through each existing stream */
         for(Stream stream : streams) {
-
             int ok1 = 0;
 
+            /* checking if the stream belongs to a streamer that the user follows  */
             for(int streamerId : userStreamerIds)
                 if (stream.getStreamerId() == streamerId) {
                     ok1 = 1;
@@ -75,6 +103,7 @@ public class RecommendationCommand implements Command{
             if(ok1 == 1) {
                 int ok2 = 0;
 
+                /* checking if the stream was already watched */
                 for (Stream userStream : accountStreams)
                     if(stream == userStream) {
                         ok2 = 1;
@@ -87,27 +116,5 @@ public class RecommendationCommand implements Command{
         }
 
         return unwatched;
-    }
-
-    private static List<Integer> getUserStreamersIds(List<Stream> accountStreams, int type) {
-        List<Integer> userStreamerIds = new ArrayList<>();
-
-        for(Stream stream : accountStreams) {
-
-            int ok = 0;
-
-            if(stream.getStreamType() != type)
-                ok = 1;
-
-            for(int streamerId : userStreamerIds)
-                if(stream.getStreamerId() == streamerId) {
-                    ok = 1;
-                    break;
-                }
-
-            if(ok == 0)
-                userStreamerIds.add(stream.getStreamerId());
-        }
-        return userStreamerIds;
     }
 }

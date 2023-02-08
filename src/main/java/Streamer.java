@@ -13,10 +13,8 @@ public class Streamer extends Account{
         this.name = name;
     }
 
-    public String toString () {
-        return streamerType + " " + id + " " + name;
-    }
-
+    /* returns the streamers streams */
+    @Override
     public List<Stream> getAccountStreams(List<Stream> streams) {
 
         List<Stream> streamerStreams = new ArrayList<>();

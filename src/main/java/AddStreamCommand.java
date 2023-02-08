@@ -4,8 +4,8 @@ import java.util.List;
 
 public class AddStreamCommand implements Command {
 
-    List<Stream> streams;
-    String line;
+    private final List<Stream> streams;
+    private final String line;
 
     public AddStreamCommand (List<Stream> streams, String line) {
 
@@ -19,16 +19,19 @@ public class AddStreamCommand implements Command {
         List<String> words = new ArrayList<>(List.of(line.split(" ")));
         words.remove(1);
 
+        /* modifying the list of words, knowing that, probably, the name of the song was divided by the split */
         addNameToParameterList(words);
 
         String[] parameters = new String[words.size()];
         parameters = words.toArray(parameters);
 
+        /* creating the new stream from the parameters */
         Stream newStream = parseParametersFromAdd(parameters);
 
         streams.add(newStream);
     }
 
+    /* parses the information and returns a stream object */
     private Stream parseParametersFromAdd(String[] parameters) {
 
         /* parsing the data from the command */
