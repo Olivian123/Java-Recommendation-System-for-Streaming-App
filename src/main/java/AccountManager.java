@@ -32,7 +32,6 @@ public class AccountManager {
 
     /* retrieves the account based on the given id */
     public Account getAccount (int id) {
-
         /* using user iterator to search in users list */
         Iterator<User> userAccountIterator = userIterator.getAccountIterator();
         Account userAccount = getAccountById(userAccountIterator, id);
@@ -47,11 +46,10 @@ public class AccountManager {
     }
 
     /* returns an account based on the id and a list */
-    /* it those not matter whether the list is of users of streamers */
+    /* it does not matter whether the list is of users or streamers */
     private Account getAccountById (Iterator<? extends Account> iterator, int id) {
 
         while(iterator.hasNext()) {
-
             Account account = iterator.next();
             if(account.getId() == id)
                 return account;

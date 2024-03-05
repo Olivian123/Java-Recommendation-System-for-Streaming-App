@@ -28,7 +28,7 @@ public class PrintListCommand implements Command{
         /* getting the accounts streams */
         List<Stream> accountStreams = account.getAccountStreams(streams);
 
-        /* I will let this here as reminder */
+        /* I will let this here as a reminder */
         /* (I don't know why , but) if the id is of a streamer, */
         /* the streams need to be listed in reversed order */
         /* if(account instanceof Streamer)
@@ -40,7 +40,8 @@ public class PrintListCommand implements Command{
 
             System.out.print(stream);
 
-            if(stream != accountStreams.get(accountStreams.size() - 1))
+            Stream lastStream = accountStreams.get(accountStreams.size() - 1);
+            if(stream != lastStream)
                 System.out.print(",");
         }
         System.out.println("]");

@@ -33,10 +33,9 @@ public class User extends Account {
         return id;
     }
 
-    public String getName () {return name; }
+    public String getName () { return name; }
 
     public  void updateStreams (int streamId) {
-
         streams.add(streamId);
     }
 }
