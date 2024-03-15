@@ -2,8 +2,8 @@
 
 This project implements a Recommendation System for a Streaming App, focusing on music, podcasts, and audiobooks. The system incorporates user behavior and stream creator data to provide personalized recommendations. Input is received through a series of commands and processed accordingly.
 
-#Functionality
-The system processes the following commands:
+Functionality
+  The system processes the following commands:
 
 ADD: Adds a new stream to the system.
 
@@ -17,10 +17,10 @@ RECOMMEND: Provides recommendations based on user preferences and behavior.
 
 SURPRISE: Provides a random surprise recommendation.
 
-#Implementation Details
-#Language: Java
+Implementation Details
+  Language: Java
 
-#Design Patterns:
+  Design Patterns:
 
 Singleton: Utilized for the AccountManager to ensure that only one instance of this class exists throughout the application, providing a central point for managing user accounts and streamers.
 
@@ -35,8 +35,8 @@ Object-Oriented Programming (OOP): Designed with OOP principles to ensure mainta
 
 Input Handling: Accepts input through a series of commands stored and processed by the system.
 
-#Usage
-To use the system:
+Usage
+  To use the system:
 
 Ensure the necessary input files are available in the specified directory.
 Execute the program, providing the necessary command line arguments.
