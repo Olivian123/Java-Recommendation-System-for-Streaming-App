@@ -13,9 +13,17 @@ RECOMMEND: Provides recommendations based on user preferences and behavior.
 SURPRISE: Provides a random surprise recommendation.
 Implementation Details
 Language: Java
-Design Patterns: Utilizes various design patterns such as Singleton, Iterator, Proxy, and Command for a compact and robust implementation.
+
+Design Patterns:
+
+Singleton: Utilized for the AccountManager to ensure that only one instance of this class exists throughout the application, providing a central point for managing user accounts and streamers.
+Iterator: Possibly used internally for iterating through collections like ArrayList, though not explicitly mentioned in the code.
+Proxy: Not explicitly mentioned in the code, but could potentially be used to control access to resources such as files or network connections.
+Command: Implemented for encapsulating method invocation, allowing for the parameterization of clients with queues, requests, or operations. Commands (AddStreamCommand, DeleteStreamCommand, etc.) encapsulate operations on streams, enabling the decoupling of the invoker (CommandCaller) from the receiver (stream operations).
 Object-Oriented Programming (OOP): Designed with OOP principles to ensure maintainability and extensibility.
+
 Input Handling: Accepts input through a series of commands stored and processed by the system.
+
 Usage
 To use the system:
 
