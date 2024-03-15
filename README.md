@@ -1,4 +1,5 @@
-#Java Recommendation System for Streaming App
+# Java Recommendation System for Streaming App
+
 This project implements a Recommendation System for a Streaming App, focusing on music, podcasts, and audiobooks. The system incorporates user behavior and stream creator data to provide personalized recommendations. Input is received through a series of commands and processed accordingly.
 
 Functionality
