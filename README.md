@@ -6,11 +6,17 @@ Functionality
 The system processes the following commands:
 
 ADD: Adds a new stream to the system.
+
 LIST: Lists streams based on specified criteria.
+
 LISTEN: Records when a user listens to a stream.
+
 DELETE: Deletes a stream from the system.
+
 RECOMMEND: Provides recommendations based on user preferences and behavior.
+
 SURPRISE: Provides a random surprise recommendation.
+
 Implementation Details
 Language: Java
 
