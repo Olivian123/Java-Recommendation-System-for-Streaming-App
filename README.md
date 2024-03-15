@@ -35,8 +35,7 @@ Object-Oriented Programming (OOP): Designed with OOP principles to ensure mainta
 
 Input Handling: Accepts input through a series of commands stored and processed by the system.
 
-Usage
-  To use the system:
+Usage:
 
 Ensure the necessary input files are available in the specified directory.
 Execute the program, providing the necessary command line arguments.
